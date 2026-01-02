@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Estadísticas ' + ${stats.jugador.nombre} + ' ' + ${stats.jugador.apellido}"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .stats-card {
+            min-width: 180px;
+            margin: 0.25rem 0.5rem 1rem 0.5rem;
+            border-radius: 12px;
+            border: 2px solid #dfdfdf;
+            box-shadow: 0px 2px 8px rgba(240,46,65,0.07);
+            text-align: center;
+        }
+        .stats-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        .stats-label {
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.97rem;
+            font-weight: 500;
+            color: #444;
+        }
+        .rank-badges {
+            margin-bottom: 26px;
+        }
+        .rank-badges .badge {
+            font-size: 1rem;
+            padding: 7px 13px;
+            margin-right: 0.4rem;
+            margin-bottom: 0.35rem;
+        }
+        footer {
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Almafuerte 2026 Logo" style="max-height:45px;" class="navbar-logo d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/jugadores}">Jugadores</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/juegos}">Partidos</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="mb-4 text-danger" th:text="'Estadísticas de ' + ${stats.jugador.nombre} + ' ' + ${stats.jugador.apellido}"></h1>
+    <div class="mb-3">
+        <b>Posición:</b> <span th:text="${stats.jugador.posicion}"></span>
+    </div>
+
+    <div class="rank-badges text-center mb-3">
+        <span class="badge bg-danger">Ranking tackles PRIMERA: <span th:text="${stats.rankingTacklesPrimera}"></span></span>
+        <span class="badge bg-secondary">Ranking tackles INTER: <span th:text="${stats.rankingTacklesNoPrimera}"></span></span>
+        <span class="badge bg-danger">Ranking puntos PRIMERA: <span th:text="${stats.rankingPuntosPrimera}"></span></span>
+        <span class="badge bg-secondary">Ranking puntos INTER: <span th:text="${stats.rankingPuntosNoPrimera}"></span></span>
+    </div>
+
+    <h3 class="mt-4 text-dark">Estadísticas generales</h3>
+    <div class="row justify-content-center align-items-stretch">
+
+        <div class="col stats-card bg-light border-primary mx-2 my-2">
+            <div class="stats-label">Juegos totales</div>
+            <div class="stats-value text-primary" th:text="${stats.juegosTotales}"></div>
+        </div>
+        <div class="col stats-card bg-light border-success mx-2 my-2">
+            <div class="stats-label">En Primera</div>
+            <div class="stats-value text-success" th:text="${stats.juegosPrimera}"></div>
+        </div>
+        <div class="col stats-card bg-light border-secondary mx-2 my-2">
+            <div class="stats-label">Intermedia</div>
+            <div class="stats-value text-secondary" th:text="${stats.juegosNoPrimera}"></div>
+        </div>
+        <div class="col stats-card bg-light border-danger mx-2 my-2">
+            <div class="stats-label">Drops</div>
+            <div class="stats-value text-danger" th:text="${stats.drops}"></div>
+        </div>
+        <div class="col stats-card bg-light border-warning mx-2 my-2">
+            <div class="stats-label">Penales</div>
+            <div class="stats-value text-warning" th:text="${stats.penales}"></div>
+        </div>
+        <div class="col stats-card bg-light border-info mx-2 my-2">
+            <div class="stats-label">Conversiones</div>
+            <div class="stats-value text-info" th:text="${stats.conversiones}"></div>
+        </div>
+        <div class="col stats-card bg-light border-danger mx-2 my-2">
+            <div class="stats-label">Tackles</div>
+            <div class="stats-value text-dark" th:text="${stats.tackles}"></div>
+        </div>
+        <div class="col stats-card bg-light border-secondary mx-2 my-2">
+            <div class="stats-label">Tries</div>
+            <div class="stats-value text-secondary" th:text="${stats.tries}"></div>
+        </div>
+    </div>
+
+    <h3 class="mt-5 mb-3 text-secondary">Estadísticas partido por partido</h3>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Rival</th>
+            <th>¿1ra?</th>
+            <th>Resultado</th>
+            <th>Tackles</th>
+            <th>Tries</th>
+            <th>Conversiones</th>
+            <th>Drops</th>
+            <th>Penales</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${stats.partidos}">
+            <td th:text="${p.fecha != null ? (p.fecha.day < 10 ? '0' : '') + p.fecha.day + '/' + (p.fecha.month < 10 ? '0' : '') + p.fecha.month + '/' + (p.fecha.year + 1900) : ''}"></td>
+            <td th:text="${p.rival}"></td>
+            <td>
+                <span th:if="${p.esPrimera}" class="badge bg-success">Sí</span>
+                <span th:unless="${p.esPrimera}" class="badge bg-secondary">No</span>
+            </td>
+            <td th:text="${p.resultado}"></td>
+            <td th:text="${p.tackles}"></td>
+            <td th:text="${p.tries}"></td>
+            <td th:text="${p.conversiones}"></td>
+            <td th:text="${p.drops}"></td>
+            <td th:text="${p.penales}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(stats.partidos)}">
+            <td colspan="9">Sin partidos registrados</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3 class="mt-4 mb-2 text-secondary">Evolución de Tackles por partido</h3>
+    <div class="mb-5">
+        <canvas id="graficoTackles" width="100%" height="48"></canvas>
+    </div>
+    <h3 class="mt-4 mb-2 text-secondary">Evolución de Puntos por partido</h3>
+    <div class="mb-5">
+        <canvas id="graficoPuntos" width="100%" height="48"></canvas>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var labels = /*[[${labelsJs}]]*/ [];
+var tacklesPrimera = /*[[${tacklesPrimeraJs}]]*/ [];
+var tacklesNoPrimera = /*[[${tacklesNoPrimeraJs}]]*/ [];
+var puntosPrimera = /*[[${puntosPrimeraJs}]]*/ [];
+var puntosNoPrimera = /*[[${puntosNoPrimeraJs}]]*/ [];
+
+const dataTackles = {
+    labels: labels,
+    datasets: [
+        {
+            label: 'Tackles en Primera',
+            data: tacklesPrimera,
+            borderColor: 'rgba(40,167,69,1)',
+            backgroundColor: 'rgba(40,167,69,0.1)',
+            tension: 0.25,
+            spanGaps: true
+        },
+        {
+            label: 'Tackles en Intermedia',
+            data: tacklesNoPrimera,
+            borderColor: 'rgba(220,53,69,1)',
+            backgroundColor: 'rgba(220,53,69,0.08)',
+            tension: 0.25,
+            spanGaps: true
+        }
+    ]
+};
+new Chart(document.getElementById('graficoTackles'), {
+    type: 'line',
+    data: dataTackles,
+    options: {
+        responsive: true,
+        scales: {
+            x: { title: { display: true, text: 'Fecha de partido' } },
+            y: { title: { display: true, text: 'Tackles' }, beginAtZero: true }
+        }
+    }
+});
+
+const dataPuntos = {
+    labels: labels,
+    datasets: [
+        {
+            label: 'Puntos en Primera',
+            data: puntosPrimera,
+            borderColor: 'rgba(0,123,255,1)',
+            backgroundColor: 'rgba(0,123,255,0.08)',
+            tension: 0.25,
+            spanGaps: true
+        },
+        {
+            label: 'Puntos en Intermedia',
+            data: puntosNoPrimera,
+            borderColor: 'rgba(255,193,7,1)',
+            backgroundColor: 'rgba(255,193,7,0.08)',
+            tension: 0.25,
+            spanGaps: true
+        }
+    ]
+};
+new Chart(document.getElementById('graficoPuntos'), {
+    type: 'line',
+    data: dataPuntos,
+    options: {
+        responsive: true,
+        scales: {
+            x: { title: { display: true, text: 'Fecha de partido' } },
+            y: { title: { display: true, text: 'Puntos' }, beginAtZero: true }
+        }
+    }
+});
+/*]]>*/
+</script>
+
+<footer class="bg-dark text-light text-center py-3 mt-4">
+    <span>Almafuerte rugby 2026 &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span></span>
+</footer>
+</body>
+</html>

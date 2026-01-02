@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Participaciones por Juego | Almafuerte 2026</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .navbar-logo { max-height: 45px; width: auto; }
+        .list-section { display: none; }
+        .list-section.active { display: block; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Almafuerte 2026 Logo" class="navbar-logo d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/admin/dashboard}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/jugadores}">Jugadores (admin)</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/crear-juego}">Partidos (admin)</a></li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-outline-light">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 class="text-danger mb-4">Participaciones y Estadísticas</h1>
+    <form method="get" th:action="@{/admin/participaciones}">
+        <div class="input-group mb-4">
+            <label class="input-group-text">Seleccionar partido:</label>
+            <select class="form-select" name="juegoId" required>
+                <option th:each="j : ${juegos}" th:value="${j.id}" th:text="${j.fecha} + ' vs ' + ${j.rival}" th:selected="${j.id} == ${juegoSel}"></option>
+            </select>
+            <button class="btn btn-danger" type="submit">Ver Participaciones</button>
+        </div>
+    </form>
+
+    <form method="post" th:if="${participaciones != null}" th:action="@{/admin/participaciones}">
+        <input type="hidden" name="juegoId" th:value="${juegoSel}"/>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr class="table-danger">
+                    <th>Jugador</th>
+                    <th>Posición</th>
+                    <th>Tries</th>
+                    <th>Conversiones</th>
+                    <th>Drops</th>
+                    <th>Penales</th>
+                    <th>Tackles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p, idx : ${participaciones}">
+                    <td th:text="${p.jugador.nombre} + ' ' + ${p.jugador.apellido}"></td>
+                    <td th:text="${p.jugador.posicion}"></td>
+                    <td><input type="number" class="form-control" min="0" name="tries" th:name="'tries_' + ${p.id}" th:value="${p.tries}"/></td>
+                    <td><input type="number" class="form-control" min="0" name="conversiones" th:name="'conversiones_' + ${p.id}" th:value="${p.conversiones}"/></td>
+                    <td><input type="number" class="form-control" min="0" name="drops" th:name="'drops_' + ${p.id}" th:value="${p.drops}"/></td>
+                    <td><input type="number" class="form-control" min="0" name="penales" th:name="'penales_' + ${p.id}" th:value="${p.penales}"/></td>
+                    <td><input type="number" class="form-control" min="0" name="tackles" th:name="'tackles_' + ${p.id}" th:value="${p.tackles}"/></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-success">Guardar estadísticas</button>
+    </form>
+</div>
+</body>
+</html>

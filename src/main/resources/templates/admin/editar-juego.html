@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Juego - Admin | Almafuerte 2026</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .navbar-logo { max-height: 45px; width: auto; }
+        .list-section { display: none; }
+        .list-section.active { display: block; }
+    </style>
+</head>
+<style>
+    .navbar-logo { max-height: 45px; width: auto; }
+    .list-section { display: none; }
+    .list-section.active { display: block; }
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Almafuerte 2026 Logo" class="navbar-logo d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/admin/dashboard}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/jugadores}">Jugadores (admin)</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/crear-juego}">Partidos (admin)</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/participaciones}">Participaciones</a></li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-outline-light">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 class="text-danger mb-4">Editar Partido</h1>
+    <form th:action="@{'/admin/juegos/editar/' + ${juego.id}}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Rival</label>
+            <input type="text" class="form-control" name="rival" th:value="${juego.rival}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Resultado</label>
+            <input type="text" class="form-control" name="resultado" th:value="${juego.resultado}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" th:value="${juego.fecha}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">¿Primera?</label>
+            <select class="form-select" name="esPrimera" required>
+                <option th:value="true" th:selected="${juego.esPrimera eq true}">Sí</option>
+                <option th:value="false" th:selected="${juego.esPrimera eq false}">No</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-danger">Guardar cambios</button>
+        <a th:href="@{/admin/juegos}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

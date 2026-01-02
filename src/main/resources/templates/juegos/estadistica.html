@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Estadísticas Partido vs ' + ${stats.juego.rival}"></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .stats-card {
+            min-width: 180px;
+            margin: 0.25rem 0.5rem 1rem 0.5rem;
+            border-radius: 12px;
+            border: 2px solid #dfdfdf;
+            box-shadow: 0px 2px 8px rgba(240,46,65,0.07);
+            text-align: center;
+        }
+        .stats-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        .stats-label {
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.97rem;
+            font-weight: 500;
+            color: #444;
+        }
+        .stat-perc-box {
+            background: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            border-radius: 8px;
+            padding: 1.1rem 0 0.5rem 0;
+            margin-bottom: 10px;
+        }
+        .stat-perc-label {
+            text-transform: uppercase;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-right: 0.3rem;
+            letter-spacing: 1px;
+        }
+        .stat-perc-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .stat-perc-value--first {
+            color: #055160 !important;
+            background: #e6f4fa;
+            padding: 2px 12px 2px 12px;
+            border-radius: 6px;
+            font-size: 1.08rem;
+        }
+        footer {
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Almafuerte 2026 Logo" style="max-height:45px;" class="navbar-logo d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/jugadores}">Jugadores</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/juegos}">Partidos</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h1 class="mb-3 text-danger" th:text="'Estadísticas del partido vs ' + ${stats.juego.rival}"></h1>
+    <div class="mb-2">
+        <b>Fecha:</b> <span th:text="${stats.juego.fecha}"></span>
+        <b class="ms-3">¿Primera?</b>: <span th:text="${stats.juego.esPrimera ? 'Sí' : 'No'}"></span>
+    </div>
+    <div class="mb-3">
+        <b>Resultado:</b> <span th:text="${stats.juego.resultado}"></span>
+    </div>
+
+    <h3 class="mt-4 text-dark">Estadísticas generales del partido</h3>
+    <div class="row justify-content-center align-items-stretch">
+        <div class="col stats-card bg-light border-secondary mx-2 my-2">
+            <div class="stats-label">Tries</div>
+            <div class="stats-value text-secondary" th:text="${stats.totalTries}"></div>
+        </div>
+        <div class="col stats-card bg-light border-danger mx-2 my-2">
+            <div class="stats-label">Tackles</div>
+            <div class="stats-value text-dark" th:text="${stats.totalTackles}"></div>
+        </div>
+        <div class="col stats-card bg-light border-info mx-2 my-2">
+            <div class="stats-label">Conversiones</div>
+            <div class="stats-value text-info" th:text="${stats.totalConversiones}"></div>
+        </div>
+        <div class="col stats-card bg-light border-warning mx-2 my-2">
+            <div class="stats-label">Drops</div>
+            <div class="stats-value text-warning" th:text="${stats.totalDrops}"></div>
+        </div>
+        <div class="col stats-card bg-light border-primary mx-2 my-2">
+            <div class="stats-label">Penales</div>
+            <div class="stats-value text-primary" th:text="${stats.totalPenales}"></div>
+        </div>
+    </div>
+
+    <!-- Porcentajes de crecimiento tries y puntos respecto al anterior -->
+    <div class="stat-perc-box mb-4">
+        <span class="stat-perc-label">Var. Tries:</span>
+        <span th:if="${stats.esPrimerPartido}" class="stat-perc-value stat-perc-value--first">Primer partido</span>
+        <span th:unless="${stats.esPrimerPartido}"
+              class="stat-perc-value"
+              th:text="|${stats.variacionTries}%|"
+              th:classappend="${#strings.contains(stats.variacionTries, '+') ? 'text-success' : (stats.variacionTries == '0' ? 'text-secondary' : 'text-danger')}">
+        </span>
+        <span class="ms-4 stat-perc-label">Var. Puntos:</span>
+        <span th:if="${stats.esPrimerPartido}" class="stat-perc-value stat-perc-value--first">Primer partido</span>
+        <span th:unless="${stats.esPrimerPartido}"
+              class="stat-perc-value"
+              th:text="|${stats.variacionPuntos}%|"
+              th:classappend="${#strings.contains(stats.variacionPuntos, '+') ? 'text-success' : (stats.variacionPuntos == '0' ? 'text-secondary' : 'text-danger')}">
+        </span>
+    </div>
+
+    <!-- Bloque gráfico de evolución de variaciones porcentuales -->
+    <h3 class="mt-4 mb-2 text-secondary">Evolución del porcentaje de Puntos y Tackles</h3>
+    <div class="mb-5">
+        <canvas id="graficoEvolucionPorcentajes" width="100%" height="48"></canvas>
+    </div>
+
+    <h3 class="mt-5 mb-3 text-secondary">Aportes de los jugadores</h3>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Jugador</th>
+            <th>Posición</th>
+            <th>Tackles</th>
+            <th>Tries</th>
+            <th>Conversiones</th>
+            <th>Drops</th>
+            <th>Penales</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${stats.participaciones}">
+            <td th:text="|${p.jugador.nombre} ${p.jugador.apellido}|"></td>
+            <td th:text="${p.jugador.posicion}"></td>
+            <td th:text="${p.tackles}"></td>
+            <td th:text="${p.tries}"></td>
+            <td th:text="${p.conversiones}"></td>
+            <td th:text="${p.drops}"></td>
+            <td th:text="${p.penales}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(stats.participaciones)}">
+            <td colspan="7">Sin participaciones registradas</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var labelsPorc = /*[[${stats.labelsJs}]]*/ [];
+var varTacklesPorc = /*[[${stats.varTacklesJs}]]*/ [];
+var varPuntosPorc = /*[[${stats.varPuntosJs}]]*/ [];
+
+const dataEvolucion = {
+    labels: labelsPorc,
+    datasets: [
+        {
+            label: 'Porcentaje Tackles',
+            data: varTacklesPorc,
+            borderColor: 'rgba(40,167,69,1)',
+            backgroundColor: 'rgba(40,167,69,0.09)',
+            borderWidth: 2,
+            tension: 0.32,
+            spanGaps: true,
+            pointRadius: 5,
+            pointBackgroundColor: ctx => ctx.raw == null ? '#ccc' : (ctx.raw > 0 ? '#218838' : ctx.raw < 0 ? '#dc3545' : '#888')
+        },
+        {
+            label: 'Porcentaje Puntos',
+            data: varPuntosPorc,
+            borderColor: 'rgba(0,123,255,1)',
+            backgroundColor: 'rgba(0,123,255,0.08)',
+            borderWidth: 2,
+            tension: 0.32,
+            spanGaps: true,
+            pointRadius: 5,
+            pointBackgroundColor: ctx => ctx.raw == null ? '#ccc' : (ctx.raw > 0 ? '#218838' : ctx.raw < 0 ? '#dc3545' : '#888')
+        }
+    ]
+};
+
+new Chart(document.getElementById('graficoEvolucionPorcentajes'), {
+    type: 'line',
+    data: dataEvolucion,
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: false
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        if (context.parsed.y == null) return 'Primer partido';
+                        let pre = context.dataset.label + ': ';
+                        let val = context.parsed.y;
+                        return pre + (val > 0 ? '+' : '') + val + '%';
+                    }
+                }
+            }
+        },
+        scales: {
+            x: { title: { display: true, text: 'Fecha de partido' } },
+            y: { title: { display: true, text: '% Variación' }, beginAtZero: false }
+        }
+    }
+});
+/*]]>*/
+</script>
+
+<footer class="bg-dark text-light text-center py-3 mt-4">
+    <span>Almafuerte rugby 2026 &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span></span>
+</footer>
+</body>
+</html>

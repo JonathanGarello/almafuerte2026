@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Juego - Admin | Almafuerte 2026</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        .navbar-logo { max-height: 45px; width: auto; }
+        .list-section { display: none; }
+        .list-section.active { display: block; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="Almafuerte 2026 Logo" class="navbar-logo d-inline-block align-text-top">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/admin/dashboard}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/jugadores}">Jugadores (admin)</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/crear-juego}">Partidos (admin)</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/admin/participaciones}">Participaciones</a></li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-outline-light">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 class="text-danger mb-4">Crear Nuevo Partido</h1>
+    <form th:action="@{/admin/crear-juego}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Rival</label>
+            <input type="text" class="form-control" name="rival" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Resultado</label>
+            <input type="text" class="form-control" name="resultado" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" name="fecha" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">¿Primera?</label>
+            <select class="form-select" name="esPrimera" required>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Agregar Jugadores participantes al juego:</label>
+            <div class="input-group mb-2">
+                <select class="form-select" id="jugadorSelect">
+                    <option th:each="j : ${jugadores}" th:value="${j.id}" th:text="${j.nombre} + ' ' + ${j.apellido} + ' (' + ${j.posicion} + ')'"></option>
+                </select>
+                <button type="button" class="btn btn-outline-danger" onclick="addJugador()">Añadir jugador</button>
+            </div>
+            <ul id="jugadoresList" class="list-group mb-2"></ul>
+            <!-- los ids de los jugadores participantes se almacenan en un campo oculto -->
+            <input type="hidden" name="jugadoresIds" id="jugadoresIds">
+        </div>
+        <button type="submit" class="btn btn-danger">Guardar Juego</button>
+        <a th:href="@{/admin/dashboard}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
+<script>
+    let jugadoresList = [];
+    function addJugador() {
+        const select = document.getElementById('jugadorSelect');
+        const jugadoresUl = document.getElementById('jugadoresList');
+        const id = select.value;
+        const text = select.options[select.selectedIndex].text;
+
+        if (!id || jugadoresList.includes(id)) return;
+        jugadoresList.push(id);
+
+        // Añadir a la lista visual
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.textContent = text;
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn btn-sm btn-danger ms-2';
+        removeBtn.textContent = 'Quitar';
+        removeBtn.onclick = function() {
+            jugadoresList = jugadoresList.filter(jid => jid !== id);
+            jugadoresUl.removeChild(li);
+            updateIds();
+        };
+        li.appendChild(removeBtn);
+        jugadoresUl.appendChild(li);
+
+        updateIds();
+    }
+    function updateIds() {
+        document.getElementById('jugadoresIds').value = jugadoresList.join(',');
+    }
+</script>
+</body>
+</html>
