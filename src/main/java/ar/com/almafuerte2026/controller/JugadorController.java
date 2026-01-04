@@ -29,6 +29,20 @@ public class JugadorController {
         return "jugadores/list";
     }
 
+    @PostMapping("/jugadores")
+    public String guardar(@ModelAttribute Jugador jugador) {
+        jugadorService.save(jugador);
+        return "redirect:/admin/jugadores";
+    }
+
+    @PostMapping("/jugadores/editar/{id}")
+    public String actualizar(@PathVariable Long id,
+                             @ModelAttribute Jugador jugador) {
+        jugador.setId(id);
+        jugadorService.save(jugador);
+        return "redirect:/admin/jugadores";
+    }
+
     @GetMapping("/jugadores/estadistica/{id}")
     public String estadisticasJugador(@PathVariable Long id, Model model) {
         JugadorService.EstadisticasJugador stats = jugadorService.obtenerEstadisticas(id);
