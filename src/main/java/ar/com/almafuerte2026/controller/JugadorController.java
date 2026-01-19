@@ -1,6 +1,7 @@
 package ar.com.almafuerte2026.controller;
 
 import ar.com.almafuerte2026.model.Jugador;
+import ar.com.almafuerte2026.model.Posicion;
 import ar.com.almafuerte2026.repository.JugadorRepository;
 import ar.com.almafuerte2026.service.JugadorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +30,6 @@ public class JugadorController {
         List<Jugador> jugadores = jugadorRepository.findAll();
         model.addAttribute("jugadores", jugadores);
         return "jugadores/list";
-    }
-
-    @PostMapping("/jugadores")
-    public String guardar(@ModelAttribute Jugador jugador) {
-        jugadorService.save(jugador);
-        return "redirect:/admin/jugadores";
-    }
-
-    @PostMapping("/jugadores/editar/{id}")
-    public String actualizar(@PathVariable Long id,
-                             @ModelAttribute Jugador jugador) {
-        jugador.setId(id);
-        jugadorService.save(jugador);
-        return "redirect:/admin/jugadores";
     }
 
     @GetMapping("/jugadores/estadistica/{id}")
@@ -87,5 +74,37 @@ public class JugadorController {
         model.addAttribute("puntosNoPrimeraJs", puntosNoPrimera);
 
         return "jugadores/estadistica";
+    }
+
+    // --- NUEVO: Form y edición ---
+    @GetMapping("/jugadores/nuevo")
+    public String mostrarFormNuevoJugador(Model model) {
+        model.addAttribute("jugador", new Jugador());
+        model.addAttribute("posiciones", Posicion.values());
+        return "jugadores/form";
+    }
+
+    @GetMapping("/jugadores/editar/{id}")
+    public String mostrarFormEditarJugador(@PathVariable Long id, Model model) {
+        Jugador jugador = jugadorRepository.findById(id).orElse(null);
+        if (jugador == null) {
+            return "redirect:/jugadores";
+        }
+        model.addAttribute("jugador", jugador);
+        model.addAttribute("posiciones", Posicion.values());
+        return "jugadores/form";
+    }
+
+    @PostMapping("/jugadores")
+    public String guardarJugador(@ModelAttribute("jugador") Jugador jugador) {
+        jugadorRepository.save(jugador);
+        return "redirect:admin/jugadores";
+    }
+
+    @PostMapping("/jugadores/editar/{id}")
+    public String actualizarJugador(@PathVariable Long id, @ModelAttribute("jugador") Jugador jugador) {
+        jugador.setId(id);
+        jugadorRepository.save(jugador);
+        return "redirect:admin/jugadores";
     }
 }
