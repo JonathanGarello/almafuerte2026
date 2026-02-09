@@ -76,7 +76,6 @@ public class JugadorController {
         return "jugadores/estadistica";
     }
 
-    // --- NUEVO: Form y edición ---
     @GetMapping("/jugadores/nuevo")
     public String mostrarFormNuevoJugador(Model model) {
         model.addAttribute("jugador", new Jugador());
@@ -98,13 +97,22 @@ public class JugadorController {
     @PostMapping("/jugadores")
     public String guardarJugador(@ModelAttribute("jugador") Jugador jugador) {
         jugadorRepository.save(jugador);
-        return "redirect:admin/jugadores";
+        // IMPORTANTE: El path del redirect debe empezar con '/' para redirigir a una URL absoluta y evitar rutas relativas erróneas.
+        return "redirect:/admin/jugadores";
     }
 
     @PostMapping("/jugadores/editar/{id}")
     public String actualizarJugador(@PathVariable Long id, @ModelAttribute("jugador") Jugador jugador) {
         jugador.setId(id);
         jugadorRepository.save(jugador);
-        return "redirect:admin/jugadores";
+        // IMPORTANTE: El path del redirect debe empezar con '/' para redirigir a una URL absoluta y evitar rutas relativas erróneas.
+        return "redirect:/admin/jugadores";
+    }
+
+    @GetMapping("/jugadores/borrar/{id}")
+    public String borrarJugador(@PathVariable Long id) {
+        jugadorRepository.deleteById(id);
+        // IMPORTANTE: El path del redirect debe empezar con '/' para redirigir a una URL absoluta y evitar rutas relativas erróneas.
+        return "redirect:/admin/jugadores";
     }
 }

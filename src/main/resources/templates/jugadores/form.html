@@ -39,7 +39,7 @@
 <div class="container" th:fragment="form">
     <h2 th:if="${jugador.id == null}">Crear nuevo jugador</h2>
     <h2 th:if="${jugador.id != null}">Editar jugador</h2>
-    <form th:action="${jugador.id != null} ? @{'/jugadores/editar/' + ${jugador.id}} : @{/jugadores}" th:object="${jugador}" method="post">
+    <form th:action="@{${jugador.id} != null ? '/jugadores/editar/' + ${jugador.id} : '/jugadores'}" th:object="${jugador}" method="post">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
             <input type="text" th:field="*{nombre}" class="form-control" id="nombre" placeholder="Nombre" required>

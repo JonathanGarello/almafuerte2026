@@ -1,5 +1,6 @@
 package ar.com.almafuerte2026.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,15 +14,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 public class SecurityConfig {
 
+    @Value("${app.admin.username}")
+    private String adminUsername;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
+
+    @Value("${app.user.username}")
+    private String userUsername;
+
+    @Value("${app.user.password}")
+    private String userPassword;
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         return new InMemoryUserDetailsManager(
-            User.withUsername("admin")
-                .password(encoder.encode("admin123"))
+            User.withUsername(adminUsername)
+                .password(encoder.encode(adminPassword))
                 .roles("ADMIN")
                 .build(),
-            User.withUsername("usuario")
-                .password(encoder.encode("user123"))
+            User.withUsername(userUsername)
+                .password(encoder.encode(userPassword))
                 .roles("USER")
                 .build()
         );
