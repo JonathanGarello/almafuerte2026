@@ -44,7 +44,8 @@ public class AdminJuegosController {
                                      @RequestParam String rival,
                                      @RequestParam String resultado,
                                      @RequestParam LocalDate fecha,
-                                     @RequestParam String esPrimera) {
+                                     @RequestParam String esPrimera,
+                                     @RequestParam int infracciones) {
         Optional<Juego> juegoOpt = juegoRepository.findById(id);
         if (juegoOpt.isPresent()) {
             Juego juego = juegoOpt.get();
@@ -52,6 +53,7 @@ public class AdminJuegosController {
             juego.setResultado(resultado);
             juego.setFecha(fecha);
             juego.setEsPrimera(Boolean.parseBoolean(esPrimera));
+            juego.setInfracciones(infracciones);
             juegoRepository.save(juego);
         }
         return "redirect:/admin/juegos";

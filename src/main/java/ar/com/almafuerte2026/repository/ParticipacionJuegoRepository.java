@@ -20,6 +20,12 @@ public interface ParticipacionJuegoRepository extends JpaRepository<Participacio
         Long getPuntos();
     }
 
+    // Proyección para ranking de tarjetas (amarillas + rojas)
+    interface RankingTarjetas {
+        Jugador getJugador();
+        Long getTarjetas();
+    }
+
     // Ranking tackles para "primera"
     @Query("SELECT p.jugador AS jugador, SUM(p.tackles) AS tackles " +
            "FROM ParticipacionJuego p " +
@@ -68,6 +74,24 @@ public interface ParticipacionJuegoRepository extends JpaRepository<Participacio
            "GROUP BY p.jugador " +
            "ORDER BY puntos DESC")
     List<RankingPuntos> rankingPuntosGeneral();
+
+    // Ranking tarjetas para "primera"
+    @Query("SELECT p.jugador AS jugador, " +
+           "SUM(p.tarjetasAmarillas + p.tarjetasRojas) AS tarjetas " +
+           "FROM ParticipacionJuego p " +
+           "WHERE p.juego.esPrimera = true " +
+           "GROUP BY p.jugador " +
+           "ORDER BY tarjetas DESC")
+    List<RankingTarjetas> rankingTarjetasPrimera();
+
+    // Ranking tarjetas para "no primera"
+    @Query("SELECT p.jugador AS jugador, " +
+           "SUM(p.tarjetasAmarillas + p.tarjetasRojas) AS tarjetas " +
+           "FROM ParticipacionJuego p " +
+           "WHERE p.juego.esPrimera = false " +
+           "GROUP BY p.jugador " +
+           "ORDER BY tarjetas DESC")
+    List<RankingTarjetas> rankingTarjetasNoPrimera();
 
     // Nuevo: Obtener participaciones por juego
     List<ParticipacionJuego> findAllByJuego_Id(Long juegoId);

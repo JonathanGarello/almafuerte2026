@@ -23,6 +23,10 @@ public class HomeController {
         model.addAttribute("puntosPrimera", participacionJuegoService.rankingPuntosPrimera());
         model.addAttribute("puntosNoPrimera", participacionJuegoService.rankingPuntosNoPrimera());
 
+        // Rankings tarjetas (amarillas + rojas)
+        model.addAttribute("tarjetasPrimera", participacionJuegoService.rankingTarjetasPrimera());
+        model.addAttribute("tarjetasNoPrimera", participacionJuegoService.rankingTarjetasNoPrimera());
+
         return "index";
     }
 }

@@ -58,8 +58,10 @@
                     <th>Tries</th>
                     <th>Conversiones</th>
                     <th>Drops</th>
-                    <th>Penales</th>
+                    <th>Penales a los palos</th>
                     <th>Tackles</th>
+                    <th>Amarillas</th>
+                    <th>Rojas</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,6 +73,8 @@
                     <td><input type="number" class="form-control" min="0" name="drops" th:name="'drops_' + ${p.id}" th:value="${p.drops}"/></td>
                     <td><input type="number" class="form-control" min="0" name="penales" th:name="'penales_' + ${p.id}" th:value="${p.penales}"/></td>
                     <td><input type="number" class="form-control" min="0" name="tackles" th:name="'tackles_' + ${p.id}" th:value="${p.tackles}"/></td>
+                    <td><input type="number" class="form-control" min="0" th:name="'tarjetasAmarillas_' + ${p.id}" th:value="${p.tarjetasAmarillas}"/></td>
+                    <td><input type="number" class="form-control" min="0" th:name="'tarjetasRojas_' + ${p.id}" th:value="${p.tarjetasRojas}"/></td>
                 </tr>
             </tbody>
         </table>

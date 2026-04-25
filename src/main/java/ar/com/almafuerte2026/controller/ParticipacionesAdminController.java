@@ -42,6 +42,8 @@ public class ParticipacionesAdminController {
             p.setDrops(parseInt(params, "drops_" + p.getId()));
             p.setPenales(parseInt(params, "penales_" + p.getId()));
             p.setTackles(parseInt(params, "tackles_" + p.getId()));
+            p.setTarjetasAmarillas(parseInt(params, "tarjetasAmarillas_" + p.getId()));
+            p.setTarjetasRojas(parseInt(params, "tarjetasRojas_" + p.getId()));
             participacionJuegoRepository.save(p);
         }
         return "redirect:/admin/participaciones";

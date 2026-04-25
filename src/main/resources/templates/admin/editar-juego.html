@@ -64,6 +64,13 @@
                 <option th:value="false" th:selected="${juego.esPrimera eq false}">No</option>
             </select>
         </div>
+
+        <div class="mb-3">
+            <label class="form-label">Infracciones (total del partido)</label>
+            <input type="number" class="form-control" name="infracciones"
+                   th:value="${juego.infracciones}" min="0" required>
+        </div>
+
         <button type="submit" class="btn btn-danger">Guardar cambios</button>
         <a th:href="@{/admin/juegos}" class="btn btn-secondary ms-2">Cancelar</a>
     </form>

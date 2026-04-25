@@ -28,4 +28,11 @@ public class ParticipacionJuego {
     private int drops;
     private int penales;
     private int tackles;
+
+    // Nuevas estadísticas disciplinarias
+    @Column(nullable = true)
+    private Integer tarjetasAmarillas = 0;
+
+    @Column(nullable = true)
+    private Integer tarjetasRojas = 0;
 }

@@ -66,14 +66,18 @@ public class JuegoController {
 
         int totalTriesAnterior = 0;
         int totalPuntosAnterior = 0;
+        int totalTacklesAnterior = 0;
+        int totalInfraccionesAnterior = 0;
         if (!esPrimerPartido) {
             Juego anterior = juegosMismoTipo.get(0);
             List<ParticipacionJuego> partAnt = participacionJuegoRepository.findAllByJuego_Id(anterior.getId());
             totalTriesAnterior = partAnt.stream().mapToInt(ParticipacionJuego::getTries).sum();
+            totalTacklesAnterior = partAnt.stream().mapToInt(ParticipacionJuego::getTackles).sum();
             int conversionesAnt = partAnt.stream().mapToInt(ParticipacionJuego::getConversiones).sum();
             int dropsAnt = partAnt.stream().mapToInt(ParticipacionJuego::getDrops).sum();
             int penalesAnt = partAnt.stream().mapToInt(ParticipacionJuego::getPenales).sum();
             totalPuntosAnterior = totalTriesAnterior*5 + conversionesAnt*2 + dropsAnt*3 + penalesAnt*3;
+            totalInfraccionesAnterior = anterior.getInfracciones();
         }
 
         // Calcular variación tries %
@@ -104,6 +108,37 @@ public class JuegoController {
             double perc = ((double)diff / Math.abs(totalPuntosAnterior))*100.0;
             int redondeado = (int)Math.round(perc);
             variacionPuntos = (redondeado > 0 ? "+" : "") + redondeado;
+        }
+
+        // Calcular variación tackles %
+        String variacionTackles = "";
+        if(esPrimerPartido) {
+            variacionTackles = null;
+        } else if(totalTacklesAnterior == 0 && totalTackles > 0) {
+            variacionTackles = "+100";
+        } else if (totalTacklesAnterior == 0) {
+            variacionTackles = "0";
+        } else {
+            int diff = totalTackles - totalTacklesAnterior;
+            double perc = ((double)diff / Math.abs(totalTacklesAnterior))*100.0;
+            int redondeado = (int)Math.round(perc);
+            variacionTackles = (redondeado > 0 ? "+" : "") + redondeado;
+        }
+
+        // Calcular variación infracciones %
+        int totalInfracciones = juego.getInfracciones();
+        String variacionInfracciones = "";
+        if(esPrimerPartido) {
+            variacionInfracciones = null;
+        } else if(totalInfraccionesAnterior == 0 && totalInfracciones > 0) {
+            variacionInfracciones = "+100";
+        } else if (totalInfraccionesAnterior == 0) {
+            variacionInfracciones = "0";
+        } else {
+            int diff = totalInfracciones - totalInfraccionesAnterior;
+            double perc = ((double)diff / Math.abs(totalInfraccionesAnterior))*100.0;
+            int redondeado = (int)Math.round(perc);
+            variacionInfracciones = (redondeado > 0 ? "+" : "") + redondeado;
         }
 
         // =========================
@@ -163,6 +198,9 @@ public class JuegoController {
         stats.put("participaciones", participaciones);
         stats.put("variacionTries", variacionTries);
         stats.put("variacionPuntos", variacionPuntos);
+        stats.put("variacionTackles", variacionTackles);
+        stats.put("variacionInfracciones", variacionInfracciones);
+        stats.put("infracciones", juego.getInfracciones());
         stats.put("esPrimerPartido", esPrimerPartido);
 
         // Pasar los datos para la gráfica

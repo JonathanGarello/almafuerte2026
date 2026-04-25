@@ -23,6 +23,10 @@ public class Juego {
     private boolean esPrimera;
     private LocalDate fecha;
 
+    // Nuevas estadísticas
+    @Column(nullable = true)
+    private Integer infracciones = 0;
+
     public boolean getEsPrimera() {
         return this.esPrimera;
     }

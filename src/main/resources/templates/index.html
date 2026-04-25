@@ -279,6 +279,80 @@
         </div>
 
     </div>
+
+    <!-- ================= TARJETAS ================= -->
+    <h1 class="my-4 text-center">Ranking de Tarjetas (Amarillas + Rojas)</h1>
+
+    <div class="row g-4">
+
+        <div class="col-12 col-md-6">
+            <h3 class="text-center">Primera</h3>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jugador</th>
+                        <th>Tarjetas</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item, stat : ${tarjetasPrimera}"
+                        th:classappend="${stat.index == 0} ? 'top-one' : ''">
+                        <td data-label="#" th:text="${stat.index + 1}"></td>
+                        <td data-label="Jugador"
+                            th:classappend="
+                               ${stat.index == 0} ? 'gold' :
+                               (${stat.index == 1} ? 'silver' :
+                               (${stat.index == 2} ? 'bronze' : ''))"
+                            th:text="${item.jugador.nombre + ' ' + item.jugador.apellido}">
+                        </td>
+                        <td data-label="Tarjetas" th:text="${item.tarjetas}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(tarjetasPrimera)}">
+                        <td colspan="3">No hay datos</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <h3 class="text-center">Intermedia</h3>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jugador</th>
+                        <th>Tarjetas</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item, stat : ${tarjetasNoPrimera}"
+                        th:classappend="${stat.index == 0} ? 'top-one' : ''">
+                        <td data-label="#" th:text="${stat.index + 1}"></td>
+                        <td data-label="Jugador"
+                            th:classappend="
+                               ${stat.index == 0} ? 'gold' :
+                               (${stat.index == 1} ? 'silver' :
+                               (${stat.index == 2} ? 'bronze' : ''))"
+                            th:text="${item.jugador.nombre + ' ' + item.jugador.apellido}">
+                        </td>
+                        <td data-label="Tarjetas" th:text="${item.tarjetas}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(tarjetasNoPrimera)}">
+                        <td colspan="3">No hay datos</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 </main>
 <footer class="bg-dark text-light text-center py-3 mt-4">

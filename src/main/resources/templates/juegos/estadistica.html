@@ -104,8 +104,13 @@
             <div class="stats-value text-warning" th:text="${stats.totalDrops}"></div>
         </div>
         <div class="col stats-card bg-light border-primary mx-2 my-2">
-            <div class="stats-label">Penales</div>
+            <div class="stats-label">Penales a los palos</div>
             <div class="stats-value text-primary" th:text="${stats.totalPenales}"></div>
+        </div>
+
+        <div class="col stats-card bg-light border-dark mx-2 my-2">
+            <div class="stats-label">Infracciones</div>
+            <div class="stats-value text-dark" th:text="${stats.infracciones}"></div>
         </div>
     </div>
 
@@ -125,6 +130,23 @@
               th:text="|${stats.variacionPuntos}%|"
               th:classappend="${#strings.contains(stats.variacionPuntos, '+') ? 'text-success' : (stats.variacionPuntos == '0' ? 'text-secondary' : 'text-danger')}">
         </span>
+
+        <span class="ms-4 stat-perc-label">Var. Tackles:</span>
+        <span th:if="${stats.esPrimerPartido}" class="stat-perc-value stat-perc-value--first">Primer partido</span>
+        <span th:unless="${stats.esPrimerPartido}"
+              class="stat-perc-value"
+              th:text="|${stats.variacionTackles}%|"
+              th:classappend="${#strings.contains(stats.variacionTackles, '+') ? 'text-success' : (stats.variacionTackles == '0' ? 'text-secondary' : 'text-danger')}">
+        </span>
+
+        <span class="ms-4 stat-perc-label">Var. Infracciones:</span>
+        <span th:if="${stats.esPrimerPartido}" class="stat-perc-value stat-perc-value--first">Primer partido</span>
+        <span th:unless="${stats.esPrimerPartido}"
+              class="stat-perc-value"
+              th:text="|${stats.variacionInfracciones}%|"
+              th:classappend="${#strings.contains(stats.variacionInfracciones, '+') ? 'text-success' : (stats.variacionInfracciones == '0' ? 'text-secondary' : 'text-danger')}">
+        </span>
+
     </div>
 
     <!-- Bloque gráfico de evolución de variaciones porcentuales -->
@@ -143,7 +165,7 @@
             <th>Tries</th>
             <th>Conversiones</th>
             <th>Drops</th>
-            <th>Penales</th>
+            <th>Penales a los palos</th>
         </tr>
         </thead>
         <tbody>

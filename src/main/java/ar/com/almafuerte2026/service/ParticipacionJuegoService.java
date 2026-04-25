@@ -71,4 +71,19 @@ public class ParticipacionJuegoService {
                 .filter(item -> item.getPuntos() > 0)
                 .toList();
     }
+
+    // Rankings de tarjetas (amarillas + rojas)
+    public List<ParticipacionJuegoRepository.RankingTarjetas> rankingTarjetasPrimera() {
+        return participacionJuegoRepository.rankingTarjetasPrimera()
+                .stream()
+                .filter(item -> item.getTarjetas() != null && item.getTarjetas() > 0)
+                .toList();
+    }
+
+    public List<ParticipacionJuegoRepository.RankingTarjetas> rankingTarjetasNoPrimera() {
+        return participacionJuegoRepository.rankingTarjetasNoPrimera()
+                .stream()
+                .filter(item -> item.getTarjetas() != null && item.getTarjetas() > 0)
+                .toList();
+    }
 }
