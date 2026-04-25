@@ -34,27 +34,41 @@ public class ParticipacionJuegoService {
 
     // Rankings de tackles
     public List<ParticipacionJuegoRepository.RankingTackles> rankingTacklesPrimera() {
-        return participacionJuegoRepository.rankingTacklesPrimera();
+        return participacionJuegoRepository.rankingTacklesPrimera()
+                .stream()
+                .filter(item -> item.getTackles() > 0)
+                .toList();
     }
 
     public List<ParticipacionJuegoRepository.RankingTackles> rankingTacklesNoPrimera() {
-        return participacionJuegoRepository.rankingTacklesNoPrimera();
+        return participacionJuegoRepository.rankingTacklesNoPrimera().stream()
+                .filter(item -> item.getTackles() > 0)
+                .toList();
     }
 
     public List<ParticipacionJuegoRepository.RankingTackles> rankingTacklesGeneral() {
-        return participacionJuegoRepository.rankingTacklesGeneral();
+        return participacionJuegoRepository.rankingTacklesGeneral().stream()
+                .filter(item -> item.getTackles() > 0)
+                .toList();
     }
 
     // Rankings de puntos
     public List<ParticipacionJuegoRepository.RankingPuntos> rankingPuntosPrimera() {
-        return participacionJuegoRepository.rankingPuntosPrimera();
+        return participacionJuegoRepository.rankingPuntosPrimera()
+                .stream()
+                .filter(item -> item.getPuntos() > 0)
+                .toList();
     }
 
     public List<ParticipacionJuegoRepository.RankingPuntos> rankingPuntosNoPrimera() {
-        return participacionJuegoRepository.rankingPuntosNoPrimera();
+        return participacionJuegoRepository.rankingPuntosNoPrimera().stream()
+                .filter(item -> item.getPuntos() > 0)
+                .toList();
     }
 
     public List<ParticipacionJuegoRepository.RankingPuntos> rankingPuntosGeneral() {
-        return participacionJuegoRepository.rankingPuntosGeneral();
+        return participacionJuegoRepository.rankingPuntosGeneral().stream()
+                .filter(item -> item.getPuntos() > 0)
+                .toList();
     }
 }
