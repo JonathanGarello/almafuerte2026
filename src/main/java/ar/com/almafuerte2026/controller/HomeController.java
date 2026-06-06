@@ -16,16 +16,23 @@ public class HomeController {
 
     @GetMapping({"/", "/index"})
     public String index(Model model) {
+
         // Rankings tackles
         model.addAttribute("tacklesPrimera", participacionJuegoService.rankingTacklesPrimera());
         model.addAttribute("tacklesNoPrimera", participacionJuegoService.rankingTacklesNoPrimera());
+
         // Rankings puntos
         model.addAttribute("puntosPrimera", participacionJuegoService.rankingPuntosPrimera());
         model.addAttribute("puntosNoPrimera", participacionJuegoService.rankingPuntosNoPrimera());
 
-        // Rankings tarjetas (amarillas + rojas)
+        // Rankings tarjetas
         model.addAttribute("tarjetasPrimera", participacionJuegoService.rankingTarjetasPrimera());
         model.addAttribute("tarjetasNoPrimera", participacionJuegoService.rankingTarjetasNoPrimera());
+
+        // Rankings tries
+        model.addAttribute("triesPrimera", participacionJuegoService.rankingTriesPrimera());
+        model.addAttribute("triesNoPrimera", participacionJuegoService.rankingTriesNoPrimera());
+        model.addAttribute("triesGeneral" , participacionJuegoService.rankingTriesGeneral());
 
         return "index";
     }

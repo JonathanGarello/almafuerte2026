@@ -86,4 +86,26 @@ public class ParticipacionJuegoService {
                 .filter(item -> item.getTarjetas() != null && item.getTarjetas() > 0)
                 .toList();
     }
+
+    // Rankings de tries
+    public List<ParticipacionJuegoRepository.RankingTries> rankingTriesPrimera() {
+        return participacionJuegoRepository.rankingTriesPrimera()
+                .stream()
+                .filter(item -> item.getTries() != null && item.getTries() > 0)
+                .toList();
+    }
+
+    public List<ParticipacionJuegoRepository.RankingTries> rankingTriesNoPrimera() {
+        return participacionJuegoRepository.rankingTriesNoPrimera()
+                .stream()
+                .filter(item -> item.getTries() != null && item.getTries() > 0)
+                .toList();
+    }
+
+    public List<ParticipacionJuegoRepository.RankingTries> rankingTriesGeneral() {
+        return participacionJuegoRepository.rankingTriesGeneral()
+                .stream()
+                .filter(item -> item.getTries() != null && item.getTries() > 0)
+                .toList();
+    }
 }

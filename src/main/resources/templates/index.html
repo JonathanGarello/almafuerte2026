@@ -33,6 +33,30 @@
             flex-shrink: 0;
         }
 
+        .crown-card {
+            background: linear-gradient(135deg, #fff3cd, #ffd700);
+            border: 3px solid #d4af37;
+            box-shadow: 0 10px 25px rgba(0,0,0,.15);
+            border-radius: 1rem;
+        }
+
+        .crown-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #7a5c00;
+        }
+
+        .crown-player-name {
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+
+        .crown-tries {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #b8860b;
+        }
+
         /* ================= MOBILE CARDS ================= */
         @media (max-width: 576px) {
 
@@ -353,6 +377,159 @@
 
     </div>
 
+    <!-- ================= TRIES ================= -->
+    <h1 class="my-4 text-center">Ranking de Tries</h1>
+    <div class="row g-4">
+
+        <div class="col-12 col-md-6">
+            <h3 class="text-center">Primera</h3>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jugador</th>
+                        <th>Tries</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item, stat : ${triesPrimera}"
+                        th:classappend="${stat.index == 0} ? 'top-one' : ''">
+                        <td data-label="#" th:text="${stat.index + 1}"></td>
+                        <td data-label="Jugador"
+                            th:classappend="
+                               ${stat.index == 0} ? 'gold' :
+                               (${stat.index == 1} ? 'silver' :
+                               (${stat.index == 2} ? 'bronze' : ''))"
+                            th:text="${item.jugador.nombre + ' ' + item.jugador.apellido}">
+                        </td>
+                        <td data-label="Tries" th:text="${item.tries}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(triesPrimera)}">
+                        <td colspan="3">No hay datos</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <h3 class="text-center">Intermedia</h3>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jugador</th>
+                        <th>Tries</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item, stat : ${triesNoPrimera}"
+                        th:classappend="${stat.index == 0} ? 'top-one' : ''">
+                        <td data-label="#" th:text="${stat.index + 1}"></td>
+                        <td data-label="Jugador"
+                            th:classappend="
+                               ${stat.index == 0} ? 'gold' :
+                               (${stat.index == 1} ? 'silver' :
+                               (${stat.index == 2} ? 'bronze' : ''))"
+                            th:text="${item.jugador.nombre + ' ' + item.jugador.apellido}">
+                        </td>
+                        <td data-label="Tries" th:text="${item.tries}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(triesNoPrimera)}">
+                        <td colspan="3">No hay datos</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TRIES GENERAL ================= -->
+    <h1 class="my-5 text-center">Ranking General de Tries</h1>
+
+    <!-- Campeón -->
+    <div th:if="${!#lists.isEmpty(triesGeneral)}"
+         class="card crown-card text-center mb-4">
+
+        <div class="card-body">
+
+            <div class="crown-title">
+                👑 Tryman actual 👑
+            </div>
+
+            <div class="crown-player-name mt-3"
+                 th:text="${triesGeneral[0].jugador.nombre + ' ' + triesGeneral[0].jugador.apellido}">
+            </div>
+
+            <div class="crown-tries mt-2"
+                 th:text="${triesGeneral[0].tries}">
+            </div>
+
+            <div class="fs-5">
+                Tries en el torneo
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Tabla completa -->
+    <div class="row">
+        <div class="col-12">
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Jugador</th>
+                        <th>Tries</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="item, stat : ${triesGeneral}"
+                        th:classappend="
+                        ${stat.index == 0} ? 'gold' :
+                        (${stat.index == 1} ? 'silver' :
+                        (${stat.index == 2} ? 'bronze' : ''))">
+
+                        <td data-label="#">
+
+                            <span th:if="${stat.index == 0}">👑</span>
+                            <span th:if="${stat.index > 0}"
+                                  th:text="${stat.index + 1}">
+                        </span>
+
+                        </td>
+
+                        <td data-label="Jugador"
+                            th:text="${item.jugador.nombre + ' ' + item.jugador.apellido}">
+                        </td>
+
+                        <td data-label="Tries"
+                            th:text="${item.tries}">
+                        </td>
+
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(triesGeneral)}">
+                        <td colspan="3">No hay datos</td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
 </div>
 </main>
 <footer class="bg-dark text-light text-center py-3 mt-4">
